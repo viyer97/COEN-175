@@ -101,7 +101,7 @@ chars           \'(\\.|[^\\'])+\'
 ","             {printf("operator %s\n", yytext);}
 "\.\.\."        {printf("operator %s\n", yytext);}
 
-.               {printf("bad character, %s\n", yytext);}
+.               {printf("bad character %s\n", yytext);}
 
 %%
 
