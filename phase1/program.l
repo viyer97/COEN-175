@@ -17,16 +17,13 @@ chars           \'(\\.|[^\\'])+\'
 
 %%
 "/*"            {
-                    char c, c1;
-                    for EVER
-                    {
-                        while((c = yyinput()) != '*' && c!= 0)
-                            ;
-                        if((c1 = yyinput()) != '/' && c!= 0)
-                        {
-                            unput(c1);
-                        }
-                        else
+                    char c1, c2;
+                    for EVER {
+                        while ((c1 = yyinput()) != '*' && c1!= EOF)
+                            ;   //go through characters in the cmt blk, until '*' found
+                        if ((c2 = yyinput()) != '/' && c1!= EOF) {
+                            unput(c2);  //char after '*' not '/', in comment 
+                        } else  //case cmt blk is ended
                             break;
                     }
                 }
@@ -106,34 +103,9 @@ chars           \'(\\.|[^\\'])+\'
 
 .               {printf("bad character, %s\n", yytext);}
 
-
 %%
 
-/*void
-comment()
-{
-    int c;
-    for(;;)
-    {
-        while((c = input()) != '*' && c != EOF)
-            ;
-        if(c == '*')
-        {
-            while(c = input() == '*')
-                ;
-            if(c == '/')
-                break;
-        }
-        if(c == EOF)
-        {
-            printf("EOF in comments")l
-            break;
-        }
-    }
- 
-
-}*/
-
+int
 main()
 {
     yylex();
