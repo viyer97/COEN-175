@@ -10,8 +10,8 @@ whitespace      [ \t\n]+
 identifier      ({alpha}|_)({alpha}|{digit}|_)*
 decimal         0|[1-9][0-9]*
 hex             0[xX](({digit}|[a-fA-F]){1,8})
-strg            \"(\\.|[^\\"])*\" 
-chars           \'(\\.|[^\\'])+\' 
+strg            \"(\\.|[^\\"\n])*\" 
+chars           \'(\\.|[^\\'\n])+\' 
 
 %option noyywrap
 
