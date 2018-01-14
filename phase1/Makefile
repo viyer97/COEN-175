@@ -1,4 +1,4 @@
-#OUTS:=$(shell find testfiles/ -name '*.c' | xargs basename -s'.c')
+OUTS:=$(shell find testfiles/ -name '*.c' | xargs basename -s'.c')
 
 all: 
 	lex -t program.l > lexer.cpp
@@ -13,7 +13,8 @@ noise:
 test:
 	lex -t program.l > lexer.cpp
 	gcc -o scc lexer.cpp
-	./scc < testfiles/extra.c > output.txt; \
+	./scc < testfiles/hello.c > output.txt;
+	diff output.txt testfiles/hello.out
 	
 
 build:
