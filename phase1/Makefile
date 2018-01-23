@@ -1,31 +1,18 @@
-OUTS:=$(shell find testfiles/ -name '*.c' | xargs basename -s'.c')
+CXX		= g++
+CXXFLAGS	= -g -Wall
+EXTRAS		= lexer.cpp
+OBJS		= lexer.o lextest.o
+PROG		= scc
 
-all: 
-	lex -t program.l > lexer.cpp
-	gcc -o scc lexer.cpp
 
-noise:
-	@echo $(OUTS)
-	for each in $(OUTS); do \
-		echo "$$each.c"; \
-	done
+all:		$(PROG)
 
-test:
-	lex -t program.l > lexer.cpp
-	gcc -o scc lexer.cpp
-	./scc < testfiles/hello.c > output.txt;
-	diff output.txt testfiles/hello.out
-	
+$(PROG):	$(EXTRAS) $(OBJS)
+		$(CXX) -o $(PROG) $(OBJS)
 
-build:
-	lex -t program.l > lexer.cpp
-	gcc -o scc lexer.cpp
-	for f in $(OUTS); do \
-		./scc < "testfiles/$$f.c" > output.txt; \
-		diff output.txt "testfiles/$$f.out"; \
-	done
+clean:;		$(RM) $(PROG) core *.o
 
-clean:
-	-rm lexer.cpp
-	-rm scc
-	-rm output.txt
+clobber:;	$(RM) $(EXTRAS) $(PROG) core *.o
+
+lexer.cpp:	lexer.l
+		$(LEX) $(LFLAGS) -t lexer.l > lexer.cpp
