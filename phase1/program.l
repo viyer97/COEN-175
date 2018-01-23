@@ -1,7 +1,9 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include "tokens.h"
     #define EVER (;;)
+        
 %}
 
 digit           [0-9]
@@ -29,77 +31,77 @@ chars           \'(\\.|[^\\'\n])+\'
                 }
 {whitespace}    {/*do nothing*/}
 
-"auto"          {printf("keyword %s\n", yytext);}
-"break"         {printf("keyword %s\n", yytext);}
-"case"          {printf("keyword %s\n", yytext);}
-"char"          {printf("keyword %s\n", yytext);}
-"const"         {printf("keyword %s\n", yytext);}
-"continue"      {printf("keyword %s\n", yytext);}
-"default"       {printf("keyword %s\n", yytext);}
-"do"            {printf("keyword %s\n", yytext);}
-"double"        {printf("keyword %s\n", yytext);}
-"else"          {printf("keyword %s\n", yytext);}
-"enum"          {printf("keyword %s\n", yytext);}
-"extern"        {printf("keyword %s\n", yytext);}
-"float"         {printf("keyword %s\n", yytext);}
-"for"           {printf("keyword %s\n", yytext);}
-"goto"          {printf("keyword %s\n", yytext);}
-"if"            {printf("keyword %s\n", yytext);}
-"int"           {printf("keyword %s\n", yytext);}
-"long"          {printf("keyword %s\n", yytext);}
-"register"      {printf("keyword %s\n", yytext);}
-"return"        {printf("keyword %s\n", yytext);}
-"short"         {printf("keyword %s\n", yytext);}
-"signed"        {printf("keyword %s\n", yytext);}
-"sizeof"        {printf("keyword %s\n", yytext);}
-"static"        {printf("keyword %s\n", yytext);}
-"struct"        {printf("keyword %s\n", yytext);}
-"switch"        {printf("keyword %s\n", yytext);}
-"typedef"       {printf("keyword %s\n", yytext);}
-"union"         {printf("keyword %s\n", yytext);}
-"unsigned"      {printf("keyword %s\n", yytext);}
-"void"          {printf("keyword %s\n", yytext);}
-"volatile"      {printf("keyword %s\n", yytext);}
-"while"         {printf("keyword %s\n", yytext);}
+"auto"          {return AUTO;}
+"break"         {return BREAK;}
+"case"          {return CASE;}
+"char"          {return CHAR;}
+"const"         {return CONST;}
+"continue"      {return CONTINUE;}
+"default"       {return DEFAULT;}
+"do"            {return DO;}
+"double"        {return DOUBLE;}
+"else"          {return ELSE;}
+"enum"          {return ENUM;}
+"extern"        {return EXTERN;}
+"float"         {return FLOAT;}
+"for"           {return FOR;}
+"goto"          {return GOTO;}
+"if"            {return IF;}
+"int"           {return INT;}
+"long"          {return LONG;}
+"register"      {return REGISTER;}
+"return"        {return SHORT;}
+"short"         {return SHORT;}
+"signed"        {return SIGNED;}
+"sizeof"        {return SIZEOF;}
+"static"        {return STATIC;}
+"struct"        {return STRUCT;}
+"switch"        {return SWITCH;}
+"typedef"       {return TYPEDEF;}
+"union"         {return UNION;}
+"unsigned"      {return UNSIGNED;}
+"void"          {return VOID;}
+"volatile"      {return VOLATILE;}
+"while"         {return WHILE;}
 
-{decimal}       {printf("decimal %s\n", yytext);}
-{hex}           {printf("hexadecimal %s\n", yytext);}
-{strg}          {printf("string %s\n", yytext);}
-{chars}         {printf("character %s\n", yytext);}
+{decimal}       {return NUM;}
+{hex}           {return NUM;}
+{strg}          {return STRING;}
+{chars}         {return CHARACTER;}
 
-{identifier}    {printf("identifier %s\n", yytext);}
+{identifier}    {return ID;}
 
-"="             {printf("operator %s\n", yytext);}
-"||"            {printf("operator %s\n", yytext);}
-"&&"            {printf("operator %s\n", yytext);}
-"|"             {printf("operator %s\n", yytext);}
-"=="            {printf("operator %s\n", yytext);}
-"!="            {printf("operator %s\n", yytext);}
-"<"             {printf("operator %s\n", yytext);}
-">"             {printf("operator %s\n", yytext);}
-"<="            {printf("operator %s\n", yytext);}
-">="            {printf("operator %s\n", yytext);}
-"+"             {printf("operator %s\n", yytext);}
-"-"             {printf("operator %s\n", yytext);}
-"*"             {printf("operator %s\n", yytext);}
-"/"             {printf("operator %s\n", yytext);}
-"%"             {printf("operator %s\n", yytext);}
-"&"             {printf("operator %s\n", yytext);}
-"!"             {printf("operator %s\n", yytext);}
-"++"            {printf("operator %s\n", yytext);}
-"--"            {printf("operator %s\n", yytext);}
-"->"            {printf("operator %s\n", yytext);}
-"("             {printf("operator %s\n", yytext);}
-")"             {printf("operator %s\n", yytext);}
-"["             {printf("operator %s\n", yytext);}
-"]"             {printf("operator %s\n", yytext);}
-"{"             {printf("operator %s\n", yytext);}
-"}"             {printf("operator %s\n", yytext);}
-";"             {printf("operator %s\n", yytext);}
-":"             {printf("operator %s\n", yytext);}
-"\."            {printf("operator %s\n", yytext);}
-","             {printf("operator %s\n", yytext);}
-"\.\.\."        {printf("operator %s\n", yytext);}
+"="             {return '=';}
+"||"            {return LOR;}
+"&&"            {return LAND;}
+"|"             {return '|';}
+"=="            {return IS_EQ;}
+"!="            {return NOT_EQ;}
+"<"             {return '<';}
+">"             {return '>';}
+"<="            {return LTE;}
+">="            {return GTE;}
+"+"             {return '+';}
+"-"             {return '-';}
+"*"             {return '*';}
+"/"             {return '/';}
+"%"             {return '%';}
+"&"             {return '&';}
+"!"             {return '!';}
+"++"            {return INC;}
+"--"            {return DEC;}
+"->"            {return DEREF_ACC;}
+"("             {return '(';}
+")"             {return ')';}
+"["             {return '[';}
+"]"             {return ']';}
+"{"             {return '{';}
+"}"             {return '}';}
+";"             {return ';';}
+":"             {return ':';}
+"\."            {return '.';}
+","             {return ',';}
+"\.\.\."        {return TRIPLE_DOT;}
 
 .               {/*do nothing printf("bad character %s\n", yytext);*/}
 
