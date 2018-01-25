@@ -1,7 +1,7 @@
 # include <stdlib.h>
 # include <iostream>
-# include "tokens.h"
-# include "lexer.h"
+# include "../includes/tokens.h"
+# include "../includes/lexer.h"
 #define EVER (;;)
 
 /*TODO: 
@@ -390,6 +390,6 @@ void ptrs()
 int main(int argc, char *argv[])
 {
     la = yylex();
-    specifier();
+    exp_or();
     return 0;
 }

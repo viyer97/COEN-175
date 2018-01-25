@@ -1,7 +1,7 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
-    #include "tokens.h"
+    #include "../includes/tokens.h"
     #define EVER (;;)
         
 %}
