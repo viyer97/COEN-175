@@ -1,7 +1,7 @@
-# include <stdlib.h>
-# include <iostream>
-# include "../includes/tokens.h"
-# include "../includes/lexer.h"
+#include <stdlib.h>
+#include <iostream>
+#include "../includes/tokens.h"
+#include "../includes/lexer.h"
 #define EVER (;;)
 
 /*TODO: 
@@ -9,7 +9,7 @@
  * double check if assignment is correct
  * might not need prints of things like statement, declaration, etc
  * declaration_s might not be correct THIS IS HARD
- * figure out whats wrong with exp_or
+ * exp_brack might not have to have a while loop because we only match brackets once
  *
  */
 
@@ -19,7 +19,7 @@ int la;
 
 void error();   //done
 void match(int t);  //done
-void exp_lst();
+void exp_lst();//done MAYBE
 void exp_t();//done MAYBE
 void exp_brack();//done
 void exp_unary();//done
@@ -37,12 +37,14 @@ void declarator_lst();//done
 void declaration();//done
 void declaration_s();//DIFFICULT
 void param();//done
-void parameter_lst();
+void param_lst();
 void param_s();
 
 void specifier();
 void ptrs();
+void global_dec();
 void trans_unit();  //rule for translation unit
+inline void rest();
 
 void error()
 {
@@ -85,14 +87,20 @@ void exp_t()
 
 
 void exp_lst()
+/*  THIS MAY NOT BE CORRECT */
 {
+    exp_or();
+    while(la == ','){
+        match(',');
+        exp_or();  //might change to exp_lst if tail recursive
+    }
 }
 
 
 void exp_brack()
 {
     exp_t();
-    while (la == '['){
+    while (la == '['){  
         match('[');
         exp_or();
         match(']');
@@ -145,7 +153,7 @@ void exp_mul()
         } else if (la == '%'){
             match('%');
             exp_unary();
-            cout << "mod" << endl;
+            cout << "rem" << endl;
         } else {
             break;
         }
@@ -252,13 +260,13 @@ void assignment()
 
 void stmt()
 {
-    if (la == '{'){
+    /*if (la == '{'){
         match('{');
         declaration_s();
         stmt_s();
         match('}');
         cout << "statement" << endl;
-    } else if (la == BREAK){
+    }*/ if (la == BREAK){
         match(BREAK);
         match(';');
         cout << "statement" << endl;
@@ -328,9 +336,9 @@ void declarator()
 void declarator_lst()
 {
     declarator();
-    if (la == ','){
+    while (la == ','){  //might need to be changed to if and recur
         match(',');
-        declarator_lst();
+        declarator();
         cout << "declarator list" << endl;
     } 
 }
@@ -346,10 +354,13 @@ void declaration()
 
 void declaration_s()
 {
-    /* THIS IS WRONG */
+    /* I don't know if this works*/
     
-    declaration();
-    declaration_s();
+/*    declaration();
+    declaration_s(); */
+    while (la != ';'){
+        declaration(); 
+    }
 }
 
 
@@ -364,9 +375,31 @@ void param()
 void param_lst()
 {
     param();
-    if (la == ','){
+    while (la == ','){  //might need to use if and recur
         match(',');
-        param_lst();
+        param();
+    }
+}
+
+
+void param_s()
+{
+    /* FINISH THIS FUNCTIONS */
+    if (la == VOID || la == INT || la == CHAR){
+        match(la);
+        if (la != ')'){
+            ptrs();
+            match(ID);
+
+            while (la == ','){
+                match(',');
+                if (la == TRIPLE_DOT){
+                    match(TRIPLE_DOT);
+                    break;  //may need to change this loop
+                }
+                param();
+            }
+        }
     }
 }
 
@@ -385,11 +418,82 @@ void specifier()
 
 void ptrs()
 {
+    while (la == '*'){
+        match('*');
+    }
 }
-    
+
+
+void global_dec()
+{
+    ptrs();
+    match(ID);
+    if (la == '('){
+        match('(');
+        param_s();
+        match(')');
+    } else if (la == '['){
+        match('[');
+        match(NUM);
+        match(']');
+    }
+}
+
+
+void trans_unit()
+{
+    specifier();
+    ptrs();
+    match(ID);
+    cout << "global declaratoin" << endl;
+    if (la == '['){
+        match('[');
+        match(NUM);
+        match(']');
+        cout << "global array" << endl;
+    } else if (la == '('){
+        match('(');
+        param_s();
+        match(')');
+        if (la == '{'){
+            declaration_s();
+            stmt_s();
+            match('}');
+        }
+        cout << "function ting" << endl;
+    } 
+    rest();
+}
+
+
+inline void rest()
+{
+    /* this could be the reason why it's broken */
+    /*if (la == ';'){
+        match(';');
+    } else if (la == ','){
+        match(',');
+        global_dec();
+        rest();
+    }*/
+    for EVER{
+        if (la == ';'){
+            match(';');
+            break;
+        } else if (la == ','){
+            match(',');
+            global_dec();
+        }
+    }
+}
+
+
 int main(int argc, char *argv[])
 {
     la = yylex();
-    exp_or();
+    while(la != 0){
+    //    trans_unit();
+        stmt();
+    }
     return 0;
 }

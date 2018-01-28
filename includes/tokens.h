@@ -2,11 +2,11 @@
 #define TOKEN_H
 
 enum tokens {
-   AUTO=1,
+   AUTO=256,
    BREAK,
    CASE,
    CHAR,
-   CONST,
+   CONST,   //260
    CONTINUE,
    DEFAULT,
    DO,
@@ -16,17 +16,17 @@ enum tokens {
    EXTERN,
    FLOAT,
    FOR,
-   GOTO,
+   GOTO,    //270
    IF,
    INT,
    LONG,
    REGISTER,
-   RETURN,
+   RETURN,  //275
    SHORT,
    SIGNED,
    SIZEOF,
    STATIC,
-   STRUCT,
+   STRUCT,  //280
    SWITCH,
    TYPEDEF,
    UNION,
@@ -36,7 +36,7 @@ enum tokens {
    WHILE,
    NUM,
    STRING,
-   CHARACTER,
+   CHARACTER,   //290
    ID,
    LOR,
    LAND,
@@ -46,8 +46,8 @@ enum tokens {
    GTE,
    INC,
    DEC,
-   DEREF_ACC,
-   TRIPLE_DOT
+   DEREF_ACC,   //300
+   TRIPLE_DOT   //301
 };
 
 #endif

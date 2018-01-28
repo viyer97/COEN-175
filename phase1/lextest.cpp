@@ -1,8 +1,8 @@
 # include <cctype>
 # include <iostream>
 # include <string>
-# include "tokens.h"
-# include "lexer.h"
+# include "../includes/tokens.h"
+# include "../includes/lexer.h"
 
 using namespace std;
 

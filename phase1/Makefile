@@ -2,7 +2,7 @@
 
 all: 
 	lex -t lexer.l > lexer.cpp
-	gcc -o scc lexer.cpp
+	g++ -o scc lexer.cpp lextest.cpp
 
 noise:
 	@echo $(OUTS)
@@ -12,14 +12,14 @@ noise:
 
 test:
 	lex -t program.l > lexer.cpp
-	gcc -o scc lexer.cpp
+	g++ -o scc lexer.cpp
 	./scc < testfiles/hello.c > output.txt;
 	diff output.txt testfiles/hello.out
 	
 
 build:
 	lex -t program.l > lexer.cpp
-	gcc -o scc lexer.cpp
+	g++ -o scc lexer.cpp
 	for f in $(OUTS); do \
 		./scc < "testfiles/$$f.c" > output.txt; \
 		diff output.txt "testfiles/$$f.out"; \
