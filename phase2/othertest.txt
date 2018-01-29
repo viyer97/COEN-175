@@ -1,0 +1,28 @@
+int *f1(void);
+void f2(int **x, char *y);
+void *q(int x, ...);
+
+void main(int x, char z) {
+        int a,b, c,     d,e;
+            char x, y;
+                int *ee;
+                    x = (a[*b + 6] || 12 && 32) != sizeof *p;
+                        ee = f1();
+}
+
+int *f1(void) {
+        int x;
+            int y;
+                void ***e;
+                    e = &x;
+                        x = *y[3] + 4;
+                            x = *(y[3] + 4);
+                                x = (*y)[3] + 4;
+                                    x = y * **x;
+                                        qqq((2+x)*5, b*2, c-5);
+}
+
+void *qqq(int x, char ** y, int b) {
+        
+}
+
