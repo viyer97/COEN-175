@@ -50,7 +50,7 @@ chars           \'(\\.|[^\\'\n])+\'
 "int"           {return INT;}
 "long"          {return LONG;}
 "register"      {return REGISTER;}
-"return"        {return SHORT;}
+"return"        {return RETURN;}
 "short"         {return SHORT;}
 "signed"        {return SIGNED;}
 "sizeof"        {return SIZEOF;}

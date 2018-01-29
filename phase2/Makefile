@@ -1,3 +1,4 @@
+OUTS:=$(shell find examples/ -name '*.c' | xargs basename -s'.c')
 CXX		= g++
 CXXFLAGS	= -g -Wall
 EXTRAS		= lexer.cpp
@@ -15,3 +16,9 @@ clobber:;	$(RM) $(EXTRAS) $(PROG) core *.o
 
 lexer.cpp:	../phase1/lexer.l	
 		$(LEX) $(LFLAGS) -t ../phase1/lexer.l > lexer.cpp
+
+test:
+	for f in $(OUTS); do \
+		./scc < "examples/$$f.c" > output.txt; \
+		diff output.txt "examples/$$f.out"; \
+	done

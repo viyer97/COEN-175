@@ -5,39 +5,39 @@
 #define EVER (;;)
 
 /*TODO: 
- * write terminal matching thing
- * double check if assignment is correct
- * might not need prints of things like statement, declaration, etc
  * declaration_s might not be correct THIS IS HARD
  * exp_brack might not have to have a while loop because we only match brackets once
  *
+ * left factor assign function
+ * may not need parameter_lst function
  */
 
 using namespace std;
 
 int la;
 
-void error();   //done
-void match(int t);  //done
-void exp_lst();//done MAYBE
-void exp_t();//done MAYBE
-void exp_brack();//done
-void exp_unary();//done
-void exp_mul();//done
-void exp_add();//done
-void exp_ineq();//done
-void exp_eq();//done
-void exp_and();//done
-void exp_or();//done
-void assignment();//done
-void stmt();//done
-void stmt_s();//done
-void declarator();//done
-void declarator_lst();//done
+void error();   //done  TESTed
+void match(int t);  //done  TESTed
+void exp_lst();// AYBE 
+void exp_t();//done MAYBE   TESTed
+void exp_brack();//done TESTed
+void exp_unary();//done TESTed
+void exp_mul();//done   TESTed
+void exp_add();//done   TESTed
+void exp_ineq();//done  TESTed
+void exp_eq();//done    TESTed
+void exp_and();//done   TESTed
+void exp_or();//done    TESTED
+void assignment();//done    TESTED
+void stmt();//done  TESTED
+void stmt_s();//done    TESTED
+void declarator();//done    TESTED
+void declarator_lst();//done    TESTED
 void declaration();//done
-void declaration_s();//DIFFICULT
+void declaration_s();//DIFFICULT DOES NOT WORK
 void param();//done
 void param_lst();
+void param_s_prime();
 void param_s();
 
 void specifier();
@@ -254,34 +254,34 @@ void assignment()
     if (la == '='){
         match('=');
         exp_or();
-        cout << "assignment" << endl;
+        //cout << "assignment" << endl;
     } 
 }
 
 void stmt()
 {
-    /*if (la == '{'){
+    if (la == '{'){
         match('{');
         declaration_s();
         stmt_s();
         match('}');
-        cout << "statement" << endl;
-    }*/ if (la == BREAK){
+        //cout << "statement" << endl;
+    } if (la == BREAK){
         match(BREAK);
         match(';');
-        cout << "statement" << endl;
+        //cout << "statement" << endl;
     } else if (la == RETURN){
         match(RETURN);
         exp_or();
         match(';');
-        cout << "statement" << endl;
+        //cout << "statement" << endl;
     } else if (la == WHILE){
         match(WHILE);
         match('(');
         exp_or();
         match(')');
         stmt();
-        cout << "statement" << endl;
+        //cout << "statement" << endl;
     } else if (la == FOR){
         match(FOR);
         match('(');
@@ -292,7 +292,7 @@ void stmt()
         assignment();
         match(')');
         stmt();
-        cout << "statement" << endl;
+        //cout << "statement" << endl;
     } else if (la == IF){
         match(IF);
         match('(');
@@ -303,11 +303,11 @@ void stmt()
             match(ELSE);
             stmt();
         }
-        cout << "statement" << endl;
+        //cout << "statement" << endl;
     } else {
         assignment();
         match(';');
-        cout << "statement" << endl;
+        //cout << "statement" << endl;
     }
 }
 
@@ -328,8 +328,8 @@ void declarator()
         match('[');
         match(NUM);
         match(']');
-        cout << "declarator" << endl;
     }
+//    cout << "declarator" << endl;
 }
 
 
@@ -339,7 +339,7 @@ void declarator_lst()
     while (la == ','){  //might need to be changed to if and recur
         match(',');
         declarator();
-        cout << "declarator list" << endl;
+//        cout << "declarator list" << endl;
     } 
 }
 
@@ -349,7 +349,7 @@ void declaration()
     specifier();
     declarator_lst();
     match(';');
-    cout << "declaration" << endl;
+ //   cout << "declaration" << endl;
 }
 
 void declaration_s()
@@ -358,9 +358,10 @@ void declaration_s()
     
 /*    declaration();
     declaration_s(); */
-    while (la != ';'){
-        declaration(); 
+    while (la == INT || la == CHAR || la == VOID){
+        declaration();
     }
+  //  cout << "declarationSSSS" << endl;
 }
 
 
@@ -369,6 +370,7 @@ void param()
     specifier();
     ptrs();
     match(ID);
+   // cout << "parameter" << endl;
 }
 
 
@@ -379,30 +381,50 @@ void param_lst()
         match(',');
         param();
     }
+    //cout << "parameter list" << endl;
+}
+
+
+void param_s_prime()
+{
+    if (la == ','){
+        match(',');
+        if (la  == TRIPLE_DOT){
+            match(TRIPLE_DOT);
+            return;
+        }
+        param();
+        param_s_prime();
+    }
 }
 
 
 void param_s()
 {
     /* FINISH THIS FUNCTIONS */
-    if (la == VOID || la == INT || la == CHAR){
-        match(la);
+    if (la == VOID){
+        match(VOID);
         if (la != ')'){
             ptrs();
             match(ID);
-
-            while (la == ','){
-                match(',');
-                if (la == TRIPLE_DOT){
-                    match(TRIPLE_DOT);
-                    break;  //may need to change this loop
-                }
-                param();
-            }
-        }
+            param_s_prime();
+        } /*else {
+            match(')');
+        }*/
+    } else if (la == CHAR){
+        match(CHAR);
+        ptrs();
+        match(ID);
+        param_s_prime();
+    } else if (la == INT){
+        match(INT);
+        ptrs();
+        match(ID);
+        param_s_prime();
     }
+   // cout << "parameterssss" << endl;
 }
-
+       
 
 void specifier()
 {
@@ -439,30 +461,47 @@ void global_dec()
     }
 }
 
-
+/*
+ * returns void
+ * params none
+ *
+ * This function is for the translation unit rule
+ */
 void trans_unit()
 {
     specifier();
     ptrs();
     match(ID);
-    cout << "global declaratoin" << endl;
+    /*
+     * first if is matching global arrays
+     * second if is matching function declarations/definitions
+     */
     if (la == '['){
         match('[');
         match(NUM);
         match(']');
-        cout << "global array" << endl;
+    //    cout << "global array" << endl;
     } else if (la == '('){
         match('(');
         param_s();
         match(')');
+
+        /*
+         * Case when looking at function definition
+         * so we only match until end brace
+         * and don't need to call rest()
+         */
         if (la == '{'){
+            match('{');
             declaration_s();
             stmt_s();
             match('}');
+            return;
         }
-        cout << "function ting" << endl;
+    //    cout << "function ting" << endl;
     } 
     rest();
+    //cout << "global declaratoin" << endl;
 }
 
 
@@ -492,8 +531,7 @@ int main(int argc, char *argv[])
 {
     la = yylex();
     while(la != 0){
-    //    trans_unit();
-        stmt();
+        trans_unit();
     }
     return 0;
 }

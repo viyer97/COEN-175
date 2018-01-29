@@ -978,7 +978,7 @@ YY_RULE_SETUP
 case 22:
 YY_RULE_SETUP
 #line 53 "../phase1/lexer.l"
-{return SHORT;}
+{return RETURN;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP

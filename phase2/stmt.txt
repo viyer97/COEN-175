@@ -1,2 +1,1 @@
-break; 
-for(a=b; a<b; b=c) return a;
+int *a(int a, int b);
