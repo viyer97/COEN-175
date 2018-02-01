@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <iostream>
+#include <string>
 #include "../includes/tokens.h"
 #include "../includes/lexer.h"
 #define EVER (;;)
@@ -12,9 +13,13 @@
  * may not need parameter_lst function
  */
 
-using namespace std;
+//using namespace std;
 
 int la;
+
+unsigned num_match(int t); 
+std::string id_match(int t);
+/* put some other shit here for matching stuff*/ 
 
 void error();   //done  TESTed
 void match(int t);  //done  TESTed
@@ -31,24 +36,38 @@ void exp_or();//done    TESTED
 void assignment();//done    TESTED
 void stmt();//done  TESTED
 void stmt_s();//done    TESTED
-void declarator();//done    TESTED
-void declarator_lst();//done    TESTED
+void declarator(int typespec);//done    TESTED
 void declaration();//done
 void declaration_s();//DIFFICULT DOES NOT WORK
 void param();//done
 void param_lst();
 void param_s_prime();
 void param_s();
-
-void specifier();
-void ptrs();
+int specifier();
+unsigned ptrs();
 void global_dec();
 void trans_unit();  //rule for translation unit
 inline void rest();
 
 void error()
 {
-    cout << "Error in matching" << endl;
+   std::cout << "Error in matching" << std::endl;
+}
+
+
+unsigned num_match(int t)
+{
+    char *ptr;
+    unsigned len = strtoul(yytext, &ptr, 0);
+    match(t);
+    return len;
+} 
+
+std::string id_match(int t)
+{
+    std::string iden = yytext;
+    match(ID);
+    return iden;
 }
 
 
@@ -87,7 +106,6 @@ void exp_t()
 
 
 void exp_lst()
-/*  THIS MAY NOT BE CORRECT */
 {
     exp_or();
     while(la == ','){
@@ -104,7 +122,7 @@ void exp_brack()
         match('[');
         exp_or();
         match(']');
-        cout << "index" << endl;
+        std::cout << "index" << std::endl;
     }
 }
 
@@ -114,23 +132,23 @@ void exp_unary()
     if (la == '&') {
         match('&');
         exp_unary();
-        cout << "addr" << endl;
+        std::cout << "addr" << std::endl;
     } else if (la == '!') {
         match('!');
         exp_unary();
-        cout << "not" << endl;
+        std::cout << "not" << std::endl;
     } else if (la == '-') {
         match('-');
         exp_unary();
-        cout << "neg" << endl;
+        std::cout << "neg" << std::endl;
     } else if (la == '*') {
         match('*');
         exp_unary();
-        cout << "deref" << endl;
+        std::cout << "deref" << std::endl;
     } else if (la == SIZEOF){
         match(SIZEOF);
         exp_unary();
-        cout << "sizeof" << endl;
+        std::cout << "sizeof" << std::endl;
     } else {
         exp_brack();
     }
@@ -145,15 +163,15 @@ void exp_mul()
         if (la == '*'){
             match('*');
             exp_unary();
-            cout << "mul" << endl;
+            std::cout << "mul" << std::endl;
         } else if (la == '/'){
             match('/');
             exp_unary();
-            cout << "div" << endl;
+            std::cout << "div" << std::endl;
         } else if (la == '%'){
             match('%');
             exp_unary();
-            cout << "rem" << endl;
+            std::cout << "rem" << std::endl;
         } else {
             break;
         }
@@ -168,11 +186,11 @@ void exp_add()
         if (la == '+'){
             match('+');
             exp_mul();
-            cout << "add" << endl;
+            std::cout << "add" << std::endl;
         } else if (la == '-'){
             match('-');
             exp_mul();
-            cout << "sub" << endl;
+            std::cout << "sub" << std::endl;
         } else {
             break;
         }
@@ -187,19 +205,19 @@ void exp_ineq()
         if (la == '>'){
             match('>');
             exp_add();
-            cout << "gtn" << endl;
+            std::cout << "gtn" << std::endl;
         } else if (la == '<'){
             match('<');
             exp_add();
-            cout << "ltn" << endl;
+            std::cout << "ltn" << std::endl;
         } else if (la == LTE){
             match(LTE);
             exp_add();
-            cout << "leq" << endl;
+            std::cout << "leq" << std::endl;
         } else if (la == GTE){
             match(GTE);
             exp_add();
-            cout << "geq" << endl;
+            std::cout << "geq" << std::endl;
         } else {
             break;
         }
@@ -214,11 +232,11 @@ void exp_eq()
         if (la == IS_EQ){
             match(IS_EQ);
             exp_ineq();
-            cout << "eql" << endl;
+            std::cout << "eql" << std::endl;
         } else if (la == NOT_EQ){
             match(NOT_EQ);
             exp_ineq();
-            cout << "neq" << endl;
+            std::cout << "neq" << std::endl;
         } else {
             break;
         }
@@ -232,7 +250,7 @@ void exp_and()
     while (la == LAND){
         match(LAND);
         exp_eq();
-        cout << "and" << endl;
+        std::cout << "and" << std::endl;
     }
 }
 
@@ -243,7 +261,7 @@ void exp_or(void)
     while (la == LOR){
         match(LOR);
         exp_and();
-        cout << "or" << endl;
+        std::cout << "or" << std::endl;
     }
 }
 
@@ -254,7 +272,7 @@ void assignment()
     if (la == '='){
         match('=');
         exp_or();
-        //cout << "assignment" << endl;
+        //std::cout << "assignment" << std::endl;
     } 
 }
 
@@ -262,26 +280,24 @@ void stmt()
 {
     if (la == '{'){
         match('{');
+        std::cout << "open block" << std::endl;
         declaration_s();
         stmt_s();
         match('}');
-        //cout << "statement" << endl;
+        std::cout << "close block" << std::endl;
     } if (la == BREAK){
         match(BREAK);
         match(';');
-        //cout << "statement" << endl;
     } else if (la == RETURN){
         match(RETURN);
         exp_or();
         match(';');
-        //cout << "statement" << endl;
     } else if (la == WHILE){
         match(WHILE);
         match('(');
         exp_or();
         match(')');
         stmt();
-        //cout << "statement" << endl;
     } else if (la == FOR){
         match(FOR);
         match('(');
@@ -292,7 +308,6 @@ void stmt()
         assignment();
         match(')');
         stmt();
-        //cout << "statement" << endl;
     } else if (la == IF){
         match(IF);
         match('(');
@@ -303,11 +318,9 @@ void stmt()
             match(ELSE);
             stmt();
         }
-        //cout << "statement" << endl;
     } else {
         assignment();
         match(';');
-        //cout << "statement" << endl;
     }
 }
 
@@ -320,48 +333,36 @@ void stmt_s()
 }
 
 
-void declarator()
+void declarator(int typespec)
 {
-    ptrs();
-    match(ID);
+    unsigned ind = ptrs();
+    std::string id = id_match(ID); 
+    unsigned len = 0;
     if (la == '['){
         match('[');
-        match(NUM);
+        len = num_match(NUM);
         match(']');
     }
-//    cout << "declarator" << endl;
-}
-
-
-void declarator_lst()
-{
-    declarator();
-    while (la == ','){  //might need to be changed to if and recur
-        match(',');
-        declarator();
-//        cout << "declarator list" << endl;
-    } 
+    std::cout << ind << id << len << std::endl;
 }
 
 
 void declaration()
 {
-    specifier();
-    declarator_lst();
+    int typespec = specifier();
+    declarator(typespec);
+    while (la == ','){  //might need to be changed to if and recur
+        match(',');
+        declarator(typespec);
+    } 
     match(';');
- //   cout << "declaration" << endl;
 }
 
 void declaration_s()
 {
-    /* I don't know if this works*/
-    
-/*    declaration();
-    declaration_s(); */
     while (la == INT || la == CHAR || la == VOID){
         declaration();
     }
-  //  cout << "declarationSSSS" << endl;
 }
 
 
@@ -370,18 +371,18 @@ void param()
     specifier();
     ptrs();
     match(ID);
-   // cout << "parameter" << endl;
+   // std::cout << "parameter" << std::endl;
 }
 
 
 void param_lst()
 {
     param();
-    while (la == ','){  //might need to use if and recur
+    while (la == ','){  
         match(',');
         param();
     }
-    //cout << "parameter list" << endl;
+    //std::cout << "parameter list" << std::endl;
 }
 
 
@@ -401,16 +402,14 @@ void param_s_prime()
 
 void param_s()
 {
-    /* FINISH THIS FUNCTIONS */
+
     if (la == VOID){
         match(VOID);
         if (la != ')'){
             ptrs();
             match(ID);
             param_s_prime();
-        } /*else {
-            match(')');
-        }*/
+        } 
     } else if (la == CHAR){
         match(CHAR);
         ptrs();
@@ -422,27 +421,35 @@ void param_s()
         match(ID);
         param_s_prime();
     }
-   // cout << "parameterssss" << endl;
+   // std::cout << "parameterssss" << std::endl;
 }
        
 
-void specifier()
+int specifier()
 {
+    int typespec = 0;
     if (la == INT){
+        typespec = la;
         match(INT);
     } else if (la == CHAR){
+        typespec = la;
         match(CHAR);
     } else {
+        typespec = la;
         match(VOID);
     }
+    return typespec;
 }
 
 
-void ptrs()
+unsigned ptrs()
 {
+    unsigned count = 0;
     while (la == '*'){
         match('*');
+        ++count;
     }
+    return count;
 }
 
 
@@ -480,8 +487,9 @@ void trans_unit()
         match('[');
         match(NUM);
         match(']');
-    //    cout << "global array" << endl;
+    //    std::cout << "global array" << std::endl;
     } else if (la == '('){
+        std::cout << "open function scope" << std::endl;
         match('(');
         param_s();
         match(')');
@@ -496,25 +504,17 @@ void trans_unit()
             declaration_s();
             stmt_s();
             match('}');
+            std::cout << "close function scope" << std::endl;
             return;
         }
-    //    cout << "function ting" << endl;
+        std::cout << "close function scope" << std::endl;
     } 
     rest();
-    //cout << "global declaratoin" << endl;
 }
 
 
 inline void rest()
 {
-    /* this could be the reason why it's broken */
-    /*if (la == ';'){
-        match(';');
-    } else if (la == ','){
-        match(',');
-        global_dec();
-        rest();
-    }*/
     for EVER{
         if (la == ';'){
             match(';');
@@ -529,9 +529,11 @@ inline void rest()
 
 int main(int argc, char *argv[])
 {
+    std::cout << "open global scope" << std::endl;
     la = yylex();
     while(la != 0){
         trans_unit();
     }
+    std::cout << "close global scope" << std::endl;
     return 0;
 }
