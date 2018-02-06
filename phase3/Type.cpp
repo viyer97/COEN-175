@@ -1,4 +1,4 @@
-#include <type.h>
+#include <../includes/Type.h>
 
 void Type::Type()
 {

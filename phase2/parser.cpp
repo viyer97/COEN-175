@@ -83,16 +83,18 @@ void match(int t)
 void exp_t()
 {
     if (la == ID){
-        match(ID);
+        //match(ID);
+        id_match(ID);
         if (la == '('){
             match('(');
-            if (la != ')'){ //NOT SURE IF THIS WORKS
+            if (la != ')'){ 
                 exp_lst();
             }
             match(')');
         }
     } else if (la == NUM){
-        match(NUM);
+        //match(NUM);
+        num_match(NUM);
     } else if (la == STRING){
         match(STRING);
     } else if (la == CHARACTER){
@@ -370,7 +372,8 @@ void param()
 {
     specifier();
     ptrs();
-    match(ID);
+    //match(ID);
+    std::string id = id_match(ID);
    // std::cout << "parameter" << std::endl;
 }
 
@@ -407,18 +410,21 @@ void param_s()
         match(VOID);
         if (la != ')'){
             ptrs();
-            match(ID);
+            //match(ID);
+            std::string id = id_match(ID);
             param_s_prime();
         } 
     } else if (la == CHAR){
         match(CHAR);
         ptrs();
-        match(ID);
+        //match(ID);
+        std::string id = id_match(ID);
         param_s_prime();
     } else if (la == INT){
         match(INT);
         ptrs();
-        match(ID);
+        //match(ID);
+        std::string id = id_match(ID);
         param_s_prime();
     }
    // std::cout << "parameterssss" << std::endl;
@@ -456,7 +462,8 @@ unsigned ptrs()
 void global_dec()
 {
     ptrs();
-    match(ID);
+    //match(ID);
+    std::string id = id_match(ID);
     if (la == '('){
         match('(');
         param_s();
@@ -478,7 +485,9 @@ void trans_unit()
 {
     specifier();
     ptrs();
-    match(ID);
+    //match(ID);
+    std::string id = id_match(ID);
+    
     /*
      * first if is matching global arrays
      * second if is matching function declarations/definitions
