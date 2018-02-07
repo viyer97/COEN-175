@@ -1,1 +1,7 @@
-(a[*b+6]||12&&32)!=sizeof*p
+int main(void) {
+    int b;
+    for(b=1; a+b; b=2) {
+        int c;
+    } 
+    {int f;}
+}

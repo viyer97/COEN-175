@@ -17,9 +17,6 @@ clobber:;	$(RM) $(EXTRAS) $(PROG) core *.o
 lexer.cpp:	../phase1/lexer.l	
 		$(LEX) $(LFLAGS) -t ../phase1/lexer.l > lexer.cpp
 
-lextest:	lextest.cpp lexer.o
-		$(CXX) -o lextest lextest.cpp lexer.o
-
 test:
 	for f in $(OUTS); do \
 		./scc < "examples/$$f.c" > output.txt; \
