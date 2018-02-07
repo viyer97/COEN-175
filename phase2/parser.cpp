@@ -507,14 +507,6 @@ void trans_unit()
 
 inline void rest()
 {
-    /* this could be the reason why it's broken */
-    /*if (la == ';'){
-        match(';');
-    } else if (la == ','){
-        match(',');
-        global_dec();
-        rest();
-    }*/
     for EVER{
         if (la == ';'){
             match(';');
