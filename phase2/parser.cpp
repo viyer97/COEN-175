@@ -93,8 +93,8 @@ void exp_t()
             match(')');
         }
     } else if (la == NUM){
-        //match(NUM);
-        num_match(NUM);
+        match(NUM);
+        //num_match(NUM);
     } else if (la == STRING){
         match(STRING);
     } else if (la == CHARACTER){
@@ -370,10 +370,11 @@ void declaration_s()
 
 void param()
 {
-    specifier();
-    ptrs();
+    int typespec = specifier();
+    int ind = ptrs();
     //match(ID);
     std::string id = id_match(ID);
+    std::cout << ind << id << std::endl;
    // std::cout << "parameter" << std::endl;
 }
 
@@ -405,7 +406,7 @@ void param_s_prime()
 
 void param_s()
 {
-
+    unsigned ind; 
     if (la == VOID){
         match(VOID);
         if (la != ')'){
@@ -461,7 +462,8 @@ unsigned ptrs()
 
 void global_dec()
 {
-    ptrs();
+    unsigned ind = ptrs();
+    unsigned len;
     //match(ID);
     std::string id = id_match(ID);
     if (la == '('){
@@ -470,9 +472,10 @@ void global_dec()
         match(')');
     } else if (la == '['){
         match('[');
-        match(NUM);
+        len = num_match(NUM);
         match(']');
     }
+    //std::cout << ind << id << len << std::endl;
 }
 
 /*
