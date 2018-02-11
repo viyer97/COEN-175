@@ -6,13 +6,18 @@
 class Symbol {
     std::string _id;
     Type *_type;
+    bool _def;
     
     public:
         Symbol();
-        Symbol(std::string id, Type *type);
-        
+        Symbol(std::string id, Type *type, bool def = false);
 
-    
-}
+        bool operator==(const Symbol &rhs) const;
+        bool operator!=(const Symbol &rhs) const;
+        std::string getID() const;
+        Type * getType() const;
+        bool getDef() const;
+};
 
+std::ostream& operator<<(std::ostream &ostr, const Symbol &sym);
 #endif

@@ -1,6 +1,6 @@
 OUTS:=$(shell find examples/ -name '*.c' | xargs basename -s'.c')
 CXX		= g++
-CXXFLAGS	= -g -Wall
+CXXFLAGS	= -g -Wall -std=c++11
 EXTRAS		= lexer.cpp
 OBJS		= lexer.o parser.o
 PROG		= scc

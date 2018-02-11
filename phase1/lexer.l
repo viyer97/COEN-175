@@ -1,14 +1,19 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include <string>
     #include "../includes/tokens.h"
-    #define EVER (;;)
+    #include "lexer.h"
+
+    int numerrors = 0;
+    static void skip_comment();
+    #define EVER (;;)   //fun thing for spin lock
         
 %}
 
 digit           [0-9]
 alpha           [a-zA-Z]
-whitespace      [ \t\n]+  
+whitespace      [ \t]+  
 identifier      ({alpha}|_)({alpha}|{digit}|_)*
 decimal         0|[1-9][0-9]*
 hex             0[xX](({digit}|[a-fA-F]){1,8})
@@ -18,18 +23,18 @@ chars           \'(\\.|[^\\'\n])+\'
 %option noyywrap
 
 %%
-"/*"            {
+"/*"            {skip_comment();
+                    /*
                     char c1, c2;
                     for EVER {
                         while ((c1 = yyinput()) != '*' && c1!= EOF)
-                            ;   //go through characters in the cmt blk, until '*' found
+                            ;   //go thru chars in the cmt blk until * found
                         if ((c2 = yyinput()) != '/' && c1!= EOF) {
                             unput(c2);  //char after '*' not '/', in comment 
                         } else  //case cmt blk is ended
                             break;
-                    }
+                    }*/
                 }
-{whitespace}    {/*do nothing*/}
 
 "auto"          {return AUTO;}
 "break"         {return BREAK;}
@@ -103,12 +108,39 @@ chars           \'(\\.|[^\\'\n])+\'
 ","             {return ',';}
 "\.\.\."        {return TRIPLE_DOT;}
 
+{whitespace}    {/*do nothing*/}
+\n+             {yylineno += yyleng;}
 .               {/*do nothing printf("bad character %s\n", yytext);*/}
 
 %%
 
-int
-main()
+static void skip_comment()
+{
+    char c1, c2;
+    for EVER {
+        while ((c1 = yyinput()) != '*' && c1!= EOF){
+        //go through characters in the cmt blk, until '*' found
+            if (c1 == '\n'){
+                yylineno++;
+            }
+        }
+        if ((c2 = yyinput()) != '/' && c1!= EOF) {
+            unput(c2);  //char after '*' not '/', in comment 
+        } else  //case cmt blk is ended
+            break;
+    }
+}
+
+void report(const string &str, const string &arg)
+{
+    char buf[1000];
+
+    snprintf(buf, sizeof(buf), str.c_str(), arg.c_str());
+    cerr << "line " << yylineno << ": " << buf << endl;
+    numerrors ++;
+}
+
+int main()
 {
     yylex();
     return 0;

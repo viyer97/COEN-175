@@ -1,13 +1,13 @@
 #include "../includes/Type.h"
-/*
+#include <iostream>
+
 Type::Type()
 {
 
-}*/
+}
 
 Type::Type(int specifier, unsigned indirection)
 {
-    /* change to using setters */
     _specifier = specifier;
     _indirection = indirection;
     _kind = SCALAR;
@@ -26,7 +26,7 @@ Type::Type(int specifier, unsigned indirection, Parameters *params)
 {
     _specifier = specifier;
     _indirection = indirection;
-    _params = params;   //make sure to call std::move when assigning    
+    _params = params;   
     _kind = FUNCTION;
 }
 
@@ -40,12 +40,18 @@ bool Type::operator==(const Type &rhs) const
         return true;
     }
 
-    if (_length != rhs._kind){
+    if (_specifier != rhs._specifier){
         return false;
     }
 
-    if (_specifier != rhs._specifier){
+    if (_indirection != rhs._indirection){
         return false;
+    }
+
+    if (_kind == ARRAY){
+        if (_length != rhs._length){
+            return false;
+        }
     }
 
     if (_kind == FUNCTION){
@@ -54,7 +60,6 @@ bool Type::operator==(const Type &rhs) const
 
     return true;
 }
-
 
 bool Type::operator!=(const Type &rhs) const
 {
@@ -132,10 +137,18 @@ std::ostream& operator<<(std::ostream &ostr, const Type &type)
     return ostr;
 }
 
+/*
 int main()
 {
-    Type t = new Type();
-    Type t = new Type();
+    Type *t = new Type();
+    Type *t2 = new Type(10, 3);
+    Type *t3 = new Type(10, 3, 5);
+    std::vector<Type> v = {*t2, *t3};
+    Type *t4 = new Type(2, 5, &v);
+    Type *t5 = new Type(3, 5, &v);
+    if (*t4 != *t5)
+        std::cout << "not equal works" << std::endl;
+    std::cout << *t4 << std::endl;
 
     return 0;
-}
+}*/
