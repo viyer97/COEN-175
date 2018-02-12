@@ -60,6 +60,7 @@ std::ostream& operator<<(std::ostream &ostr, const Scope &scope)
     return ostr;
 }
 
+/*
 main()
 {
     Type *t1 = new Type(11, 1);
@@ -79,4 +80,4 @@ main()
     Scope *sc3 = new Scope(sc2);
     sc2->insert(s3);
     std::cout << *sc3->lookup("the name2") << std::endl;
-}
+}*/

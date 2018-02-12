@@ -10,7 +10,7 @@ class Symbol {
     
     public:
         Symbol();
-        Symbol(std::string id, Type *type, bool def = false);
+        Symbol(std::string id, Type *type, bool def);
 
         bool operator==(const Symbol &rhs) const;
         bool operator!=(const Symbol &rhs) const;

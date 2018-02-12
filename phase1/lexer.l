@@ -2,8 +2,9 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <string>
+    #include <iostream>
     #include "../includes/tokens.h"
-    #include "lexer.h"
+    #include "../includes/lexer.h"
 
     int numerrors = 0;
     static void skip_comment();
@@ -131,12 +132,12 @@ static void skip_comment()
     }
 }
 
-void report(const string &str, const string &arg)
+void report(const std::string &str, const std::string &arg)
 {
     char buf[1000];
 
     snprintf(buf, sizeof(buf), str.c_str(), arg.c_str());
-    cerr << "line " << yylineno << ": " << buf << endl;
+    std::cerr << "line " << yylineno << ": " << buf << std::endl;
     numerrors ++;
 }
 

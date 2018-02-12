@@ -3,7 +3,7 @@
 
 Type::Type()
 {
-
+    _kind = ERROR;
 }
 
 Type::Type(int specifier, unsigned indirection)

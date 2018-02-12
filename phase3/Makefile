@@ -2,7 +2,7 @@ OUTS:=$(shell find examples/ -name '*.c' | xargs basename -s'.c')
 CXX		= g++
 CXXFLAGS	= -g -Wall -std=c++11
 EXTRAS		= lexer.cpp
-OBJS		= lexer.o parser.o
+OBJS		= lexer.o parser.o Type.o Symbol.o Scope.o checker.o
 PROG		= scc
 
 all:		$(PROG)	
