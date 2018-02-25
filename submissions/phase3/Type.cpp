@@ -1,4 +1,4 @@
-#include "../includes/Type.h"
+#include "Type.h"
 #include <iostream>
 
 Type::Type()
@@ -113,19 +113,6 @@ bool Type::isFunction() const
 bool Type::isScalar() const
 {
     if (_kind == SCALAR){
-        return true;
-    }
-    return false;
-}
-
-/*I DON'T KNOW IF THIS IS CORRECT */
-bool Type::isValue() const
-{
-    Type t = promote();
-    if (t._kind == SCALAR && t_indirection > 0){ //IDK if this is correct
-        return true;
-    }
-    if (t_kind == SCALAR && t_indirection == 0){
         return true;
     }
     return false;

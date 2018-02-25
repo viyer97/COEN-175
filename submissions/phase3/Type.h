@@ -31,12 +31,6 @@ class Type{
         bool isArray() const;
         bool isFunction() const;
         bool isScalar() const;
-
-        /* added in phae 4 */
-        bool isValue() const;
-        bool isInteger() const;
-        bool isPointer() const;
-        bool isCompatibleWith(/*some stuff here*/);
 }; 
 
 std::ostream& operator<<(std::ostream &ostr, const Type &type);
