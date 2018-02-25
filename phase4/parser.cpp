@@ -8,20 +8,14 @@
 #define EVER (;;)
 
 /*TODO: 
- * declaration_s might not be correct THIS IS HARD
- * exp_brack might not have to have a while loop because we only match brackets once
- *
- * left factor assign function
  * may not need parameter_lst function
  */
 
-//using namespace std;
 
 int la;
 
 unsigned num_match(int t); 
 std::string id_match(int t);
-/* put some other shit here for matching stuff*/ 
 
 void error();   //done  TESTed
 void match(int t);  //done  TESTed
@@ -270,6 +264,7 @@ Type exp_and(bool &lvalue)
 Type exp_or(bool &lvalue)
 {
     Type left = exp_and(lvalue);
+
     while (la == LOR){
         match(LOR);
         Type right = exp_and(lvalue);

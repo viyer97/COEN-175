@@ -7,15 +7,24 @@
 Scope *global = NULL;  //global scope i think
 Scope *top = NULL;   //current scope?
 
+int in_loop = 0;    //check if inside for/while loop (need for break stmt)
 /***********************************************/
 
 /* Helpful strings for reporting errors */
-std::string typeConflict = "conflicting types for %s";
-std::string redef = "redefinition of %s";
-std::string redecl = "redeclaration of %s";
-std::string undecl = "%s undeclared"; 
-std::string voidType = "%s has type void";
+std::string typeConflict = "conflicting types for '%s'";
+std::string redef = "redefinition of '%s'";
+std::string redecl = "redeclaration of '%s'";
+std::string undecl = "'%s' undeclared"; 
+std::string voidType = "'%s' has type void";
 
+std::string badBreak = "break statement not within loop";
+std::string badRetType = "invalid return type";
+std::string badTestExpr = "invalid type for test expression";
+std::string badLvalue = "lvalue required in expression";
+std::string badBinaryOp = "invalid operands to binary operator";
+std::string badUnaryOp = "invalid operand to unary operator";
+std::string badFuncCall = "called object is not a function";
+std::string badArgs = "invlaid arguments to called function";
 /***************************************************/
 //typedef integer Type(INT, 0); //IDK IF THIS IS CORRECT
 

@@ -1,0 +1,3 @@
+line 1: 'y' has type void
+line 6: 'x' undeclared
+line 9: conflicting types for 'bar'

@@ -14,8 +14,8 @@ clean:;		$(RM) $(PROG) core *.o
 
 clobber:;	$(RM) $(EXTRAS) $(PROG) core *.o
 
-lexer.cpp:	lexer.l	
-		$(LEX) $(LFLAGS) -t lexer.l > lexer.cpp
+#lexer.cpp:	lexer.l	
+#		$(LEX) $(LFLAGS) -t lexer.l > lexer.cpp
 
 test:
 	for f in $(OUTS); do \
