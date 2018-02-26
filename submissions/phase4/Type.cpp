@@ -174,11 +174,13 @@ bool Type::isCompatible(const Type &right) const
      */
     if (new_left == new_right) {
         return true;
-    } else if (new_left.isPointer() && (new_left.specifier() == VOID)
+    } else if ((new_left.indirection() == 1) && (new_left.specifier() == VOID)
                 && new_right.isPointer()) {
+            /* case where left is pointer to void */
         return true;
-    } else if (new_left.isPointer() && new_right.isPointer()
+    } else if (new_left.isPointer() && (new_right.indirection() == 1)
                 && (new_right.specifier() == VOID)) {
+            /* case where right is pointer to void */
         return true;
     }
     
