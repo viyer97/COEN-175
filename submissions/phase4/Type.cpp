@@ -1,9 +1,15 @@
-#include "../includes/Type.h"
+#include "Type.h"
+#include "tokens.h"
 #include <iostream>
 
 Type::Type()
 {
     _kind = ERROR;
+}
+
+Type::Type(int specifier)
+{
+    _kind = ELLIPSIS;
 }
 
 Type::Type(int specifier, unsigned indirection)
@@ -118,18 +124,80 @@ bool Type::isScalar() const
     return false;
 }
 
+bool Type::isEllipsis() const
+{
+    if (_kind == ELLIPSIS) {
+        return true;
+    }
+    return false;
+}
+
+Type Type::promote() const
+{
+    /* if is a char, promote to int */
+    if (_specifier == CHAR && !_indirection && _kind == SCALAR) {
+        return Type(INT, 0);
+    }
+
+    /* if it is an array, promote to pointer */
+    if (_kind == ARRAY) {
+        return Type(_specifier, _indirection + 1);
+    }
+    
+    return *this;
+}
+
+bool Type::isPointer() const
+{
+    if (_kind == SCALAR && _indirection > 0) {
+        return true;
+    }
+    return false;
+}
+
+bool Type::isInteger() const
+{
+    if (*this == Type(272, 0)) {
+        return true;
+    }
+    return false;
+}
+
+bool Type::isCompatible(const Type &right) const
+{
+    Type new_left = promote();
+    Type new_right = right.promote();
+
+    /* 
+     * values are compatible if after any promotion the yare identical
+     * or one is pointer to T and the other is a pointer to void
+     */
+    if (new_left == new_right) {
+        return true;
+    } else if (new_left.isPointer() && (new_left.specifier() == VOID)
+                && new_right.isPointer()) {
+        return true;
+    } else if (new_left.isPointer() && new_right.isPointer()
+                && (new_right.specifier() == VOID)) {
+        return true;
+    }
+    
+    return false;
+}
+
 /*I DON'T KNOW IF THIS IS CORRECT */
-//bool Type::isValue() const
-//{
-//    Type t = promote();
-//    if (t._kind == SCALAR && t_indirection > 0){ //IDK if this is correct
-//        return true;
-//    }
-//    if (t_kind == SCALAR && t_indirection == 0){
-//        return true;
-//    }
-//    return false;
-//}
+bool Type::isValue() const
+{
+    Type t = promote(); //might need to use "this" ptr
+
+    if (t.isPointer()) {   //check if t is a pointer
+        return true;
+    }
+    if (t.isInteger()) {    //check if t is an integer
+        return true;
+    }
+    return false;
+}
 
 std::ostream& operator<<(std::ostream &ostr, const Type &type)
 {

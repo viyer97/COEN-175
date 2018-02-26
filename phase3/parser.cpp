@@ -102,6 +102,7 @@ void exp_t()
         match(NUM);
         //num_match(NUM);
     } else if (la == STRING){
+        std::cout << sizeof(yytext) << std::endl;
         match(STRING);
     } else if (la == CHARACTER){
         match(CHARACTER);

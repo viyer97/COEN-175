@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
-#include "../includes/tokens.h"
-#include "../includes/lexer.h"
-#include "../includes/Scope.h"
-#include "../includes/checker.h"
+#include "tokens.h"
+#include "lexer.h"
+#include "Scope.h"
+#include "checker.h"
 #define EVER (;;)
 
 /*TODO: 

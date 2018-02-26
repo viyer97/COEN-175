@@ -84,6 +84,7 @@ void declare_func(std::string name, Type *t)
     sym = global->find(name);
     Symbol *curr_symbol = new Symbol(name, t, false);
     
+    /* if symbol already in table */
     if(sym){
         Type *found_type = sym->getType();
 
@@ -98,6 +99,9 @@ void declare_func(std::string name, Type *t)
         /*case where the function has previously been defined,
          * report a redefine error and return
          */
+
+        /* all redeclarations are discarded */
+        return;
     }
     global->insert(curr_symbol);
 }

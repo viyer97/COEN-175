@@ -1,8 +1,8 @@
-#include "../includes/Scope.h"
-#include "../includes/lexer.h"
-#include "../includes/checker.h"
-#include "../includes/tokens.h"
-#include "../includes/Type.h"
+#include "Scope.h"
+#include "lexer.h"
+#include "checker.h"
+#include "tokens.h"
+#include "Type.h"
 
 /* Global varialbes for Scope LL defined below */
 Scope *global = NULL;  //global scope i think

@@ -1,0 +1,4 @@
+1) Find out where promote() goes (i think it's in Type)
+2) rewrite expressions to return Types and do the actual type checking
+3) have type checks for statements (like break statements in loops, etc).
+4) have type checks for assignments
